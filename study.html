@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OS Master Study Tool</title>
+    <title>OS Study Guide</title>
     <style>
         :root {
             --bg-color: #0f0f0f;
@@ -130,77 +130,100 @@
                 { q: "The [BLANK] page replacement algorithm selects the page that has not been referenced for the longest time.", a: "LRU" },
                 { q: "In the effective access time formula E = (1 - P) x m + P x S, the variable S represents the [BLANK].", a: "service time" },
                 { q: "A large page table can be subdivided into pages managed by a higher order [BLANK] to reduce the amount of table that must be kept in RAM.", a: "directory" },
-                { q: "Two processes share a function f. With dynamic linking, if neither process ever calls f during a run, [BLANK] copies of f are loaded into memory?", a: "0" },
+                { q: "Two processes share a function f. With dynamic linking, if neither process ever calls f during a run, how many copies of f are loaded into memory? [BLANK]", a: "0" },
                 { q: "At each memory reference, the working set algorithm evicts all pages that are [BLANK] the current window of size d.", a: "outside" },
                 { q: "The optimal algorithm is not realizable in practice because replacement decisions depend on [BLANK], which are unknown at runtime.", a: "future references" },
                 { q: "Demand paging loads a page into memory only when [BLANK], rather than at the start of execution.", a: "needed" },
                 { q: "With a paged page table, the page number p is split into two components p1 and p2, where p1 selects an entry in [BLANK], which points to one page of the page table.", a: "page directory" },
                 { q: "The working set W(t, d) of a process is the set of distinct pages referenced during the past [BLANK] memory operations preceding time t.", a: "d" },
-                { q: "A [BLANK] register holds the physical starting address of a program in memory and is added by the CPU to every logical address at runtime to produce the correct physical address.", a: "base" }
+                { q: "In the 7-step page fault handling sequence, what must the OS do before resuming the process after a page fault? List the key steps in order. [BLANK]", a: "update page table" },
+                { q: "A [BLANK] register holds the physical starting address of a program in memory and is added by the CPU to every logical address at runtime to produce the correct physical address.", a: "base" },
+                { q: "The [BLANK] page replacement algorithm selects the page that has been resident in memory for the longest time", a: "FIFO" },
+                { q: "The L = S criterion states that CPU utilization is near maximum when L, the mean time [BLANK], equals S, the time needed to service one page fault.", a: "between page faults" },
+                { q: "Bélády’s anomaly can occur with [BLANK] page replacement, but does NOT occur with LRU or Optimal", a: "FIFO" },
+                { q: "The aging page replacement algorithm uses an [BLANK] that is shifted right at each clock tick and loaded with the page’s reference bit to approximate how recently the page was used", a: "aging register" },
+                { q: "When m = 1, a page must be [BLANK] to disk before its frame can be reused for another page", a: "written" },
+                { q: "When L < S, the OS must [BLANK] the number of concurrent processes to avoid thrashing.", a: "decrease" },
+                { q: "As page size increases, the memory space covered by the TLB [BLANK] because each TLB entry maps a larger region.", a: "increases" },
+                { q: "The page fault frequency algorithm adjusts the resident set based on the [BLANK] between consecutive page faults", a: "time" },
+                { q: "The [BLANK] bit is a binary flag in each page table entry that indicates whether the corresponding page has been modified during execution.", a: "modified" },
+                { q: "Thrashing is an execution state in which most of the time is spent moving between [BLANK] and [BLANK] while the CPU is mostly idle.", a: "memory and disk" },
+                { q: "A [BLANK] is an interrupt that occurs when a program attempts to reference a non-resident page, causing the OS to load the page from the disk.", a: "page fault" },
+                { q: "Under the working set page placement algorithm, a process is only allowed to run if enough frames are available to hold its complete [BLANK].", a: "working set" },
+                { q: "Under the PFF algorithm, when the time since the last page fault is less than or equal to T, the faulting page is added to the resident set and the resident set [BLANK].", a: "grows" }
             ],
             8: [
-                { q: "The [BLANK] is a data structure kept in main memory that tracks all files currently in use.", a: "open file table" },
-                { q: "An alternative is to store only the file name in the directory and use a pointer to a separate [BLANK] that holds all the file’s attributes.", a: "file control block" },
-                { q: "A [BLANK] is a path that begins from the current working directory and rather than from the top of the hierarchy.", a: "relative path" },
-                { q: "A [BLANK] is a data structure used for free space management where each bit represents one disk block.", a: "bitmap" },
-                { q: "A [BLANK] is a structure of related data items identified within a file by a numeric identifier.", a: "record" },
-                { q: "In a directed acyclic directory hierarchy, a [BLANK] is a non-negative integer associated with a file that indicates how many directories are currently pointing to it.", a: "link count" },
-                { q: "A [BLANK] is a short sequence of characters at the start of the file header that identifies the file type.", a: "magic number" },
-                { q: "In a tree structured directory hierarchy, the notation [BLANK] is used to refer to the parent of the current directory.", a: ".." },
-                { q: "A [BLANK] implements the concept of files and provides a high level interface to users.", a: "file system" },
-                { q: "Given a position k and block size b, the block number is [BLANK], and the offset within that block is [BLANK].", a: "k/b and k mod b" },
-                { q: "Under the PFF algorithm, pages not referenced since the last page fault are [BLANK] from the resident set.", a: "removed" },
-                { q: "To allocate a disk block using a bitmap, a bitwise logical [BLANK] operation is applied to the byte.", a: "AND" },
-                { q: "In Unix, the structure that contains all relevant attributes is called an [BLANK].", a: "inode" },
-                { q: "If a file requires more than n blocks, the next entry in the FCB points to a [BLANK].", a: "single indirect block" },
-                { q: "The most common file access method is [BLANK].", a: "sequential access" },
-                { q: "During a read operation, the file system maintains a [BLANK] in the OFT entry.", a: "read/write buffer" },
-                { q: "The close file operation updates the [BLANK] in the FCB and then frees the OFT entry.", a: "file length" }
+                { q: "The [BLANK] is a data structure kept in main memory that tracks all files currently in use. If facilitates efficient access to and manipulation of open files, storing information such as the current position, file length, and a pointer to the files attribute structure.", a: "open file table" },
+                { q: "The main drawback of storing all file attributes inside each directory entry is that file directories can become very large, which slows down searches. An alternative is to store only the file name in the directory and use a pointer to a separate [BLANK] that holds all the file’s attributes.", a: "file control block" },
+                { q: "A [BLANK] is a path that begins from the current working directory and rather than from the top of the hierarchy, allowing shorter path references for files in or near the current directory.", a: "relative path" },
+                { q: "A [BLANK] is a data structure used for free space management where each bit represents one disk block. A value of 1 indicates the block is [BLANK], and a value of 0 indicates the block is [BLANK].", a: "bitmap and free and allocated" },
+                { q: "A [BLANK] is a structure of related data items — possibly of different data types — identified within a file by a numeric identifier or a unique key field.", a: "record" },
+                { q: "In a directed acyclic directory hierarchy, a [BLANK] is a non-negative integer associated with a file that indicates how many directories are currently pointing to it. A file is physically deleted only when this value reaches 0.", a: "link count" },
+                { q: "A [BLANK] is a short sequence of characters at the start of the file header that identifies the file type allowing the OS to determine which programs are permitted to access and interpret the file.", a: "magic number" },
+                { q: "In a tree structured directory hierarchy, the notation [BLANK] is used to refer to the parent of the current directory, allowing navigation upward in the hierarchy.", a: ".." },
+                { q: "A [BLANK] is an integral part of every OS whose function is to implement the concept of files, managing data on secondary storage and providing a high level interface to users.", a: "file system" },
+                { q: "Given a current file position k, and a block size b, the block number containing position k is computed as [BLANK], and the offset within that block is computed as [BLANK].", a: "k/b and k mod b" },
+                { q: "Under the PFF algorithm, when the time since the last page fault exceeds T, pages not referenced since the last page fault are [BLANK] from the resident set.", a: "removed" },
+                { q: "To allocate a disk block using a bitmap when individual bits cannot be addressed directly, a bitwise logical [BLANK] operation is applied to the byte containing the target bit, using a mask with a 1 in the corresponding position.", a: "AND" },
+                { q: "A [BLANK] is a data structure associated with a filename that contains all relevant attributes of the file. In Unix, this structure is called an [BLANK].", a: "file control block and inode" },
+                { q: "In the block allocation scheme used by Unix, the file control block stores the block numbers of the first n file blocks directly. If a file requires more than n blocks, the next entry in the file control block points to a [BLANK], which stores additional block numbers.", a: "single indirect block" },
+                { q: "The most common file access method is [BLANK]. In this method, the OS maintains the current position within the file, and each read/write operation accesses the next n bytes or the next record.", a: "sequential access" },
+                { q: "During a read operation, the file system avoids reading an entire disk block for every call, maintaining a [BLANK] in the OFT entry. Data is copied from this structure to memory, and a new disk block is loaded only when the end of it is reached.", a: "read/write buffer" },
+                { q: "The close file operation reverses the effects of the open operation. If the r/w buffer was modified, it saves the buffer to disk, updates the [BLANK] in the FCBm and then frees the OFT entry.", a: "file length" },
+                { q: "An [BLANK] is a path that uniquely identifies a file by listing all directory and file names from the top of the hierarchy down to the target file, with names separated by a delimiter such as a forward slash", a: "absolute path" },
+                { q: "In a [BLANK] block allocation scheme, file blocks may be scattered across the disk the FCB points to the first block, and each block contains a pointer to the next block.", a: "linked" },
+                { q: "A [BLANK] is a named collection of information managed on secondary storage by the operating system, which a user can access using high-level operations without knowing the specific characteristics of the underlying device.", a: "file" },
+                { q: "When a file is opened, the open operation returns a(n) [BLANK] into the open file table to the calling process, which is used for all subsequent read, write, and seek operations on the file", a: "index" },
+                { q: "To a free disk block using a bitmap when individual bits cannot be addressed directly, a bitwise logical [BLANK] operation is applied to the byte containing the target bit, using a mask with a 0 in the corresponding position", a: "AND" },
+                { q: "A [BLANK] is an array where each entry corresponds to one disk block. A file’s blocks are chained together by links within this array. When it is cached in memory, both sequential and direct access become efficient since no seek operations are needed to follow the chain", a: "file allocation table" }
             ],
             9: [
-                { q: "In a [BLANK] block allocation scheme, file blocks may be scattered across the disk.", a: "linked" },
-                { q: "A [BLANK] is an electronic circuit capable of operating a specific I/O device using binary signals.", a: "device controller" },
-                { q: "The [BLANK] scheduling algorithm selects the pending disk request that requires the shortest travel distance.", a: "SSTF" },
-                { q: "The [BLANK] scheduling algorithm services disk requests sequentially in the current direction of travel.", a: "SCAN" },
-                { q: "A [BLANK] is a register or an area of main memory used to hold data produced by one process to be consumed later.", a: "buffer" },
-                { q: "[BLANK] is a style of I/O programming where the CPU is responsible for copying all data.", a: "programmed i/o" },
-                { q: "The [BLANK] scheduling algorithm is a variant of Scan that services requests in only one direction.", a: "C-SCAN" },
-                { q: "Unlike Scan, C-Scan guarantees a [BLANK] access time to all tracks.", a: "fairer" },
-                { q: "A disk [BLANK] is an area of main memory used to cache recently accessed disk blocks.", a: "buffer cache" },
-                { q: "With [BLANK] forwarding, a damaged disk block is mapped directly to a spare sector.", a: "sector" },
-                { q: "In [BLANK] input mode, the keyboard driver preprocesses characters as the user types.", a: "cooked" },
-                { q: "In a RAID with [BLANK] parity, the redundant parity blocks are spread across all disks.", a: "distributed" },
-                { q: "A [BLANK] controller allows devices to transfer data directly to memory without the CPU.", a: "DMA" },
-                { q: "A [BLANK] includes multiple parity bits to permit detection and automatic correction.", a: "error-correcting code" },
-                { q: "In Hamming code, a single-bit error can be identified by [BLANK] the positions of all parity bits.", a: "summing" },
-                { q: "A disk surface is organized into concentric [BLANK], divided into fixed sectors.", a: "tracks" },
-                { q: "After starting the operation the driver [BLANK] itself instead of repeatedly polling.", a: "blocks" }
+                { q: "In a [BLANK] block allocation scheme, file blocks may be scattered across the disk. The FCB points to the first block, and each block contains a pointer to the next block. A key drawback is that direct access to a specific block is not possible without reading all preceding blocks.", a: "linked" },
+                { q: "A [BLANK] is an electronic circuit capable of operating a specific I/O device using binary signals, and its interface consists of a set of hardware registers and flags.", a: "device controller" },
+                { q: "The [BLANK] scheduling algorithm always selects the pending disk request that requires the shortest travel distance from the current head position, maximizing performance but risking starvation of distant tracks.", a: "SSTF" },
+                { q: "The [BLANK] scheduling algorithm (also called the elevator algorithm) services disk requests sequentially in the current direction of travel, reversing direction only when the outermost pending request is reached.", a: "SCAN" },
+                { q: "A [BLANK] is a register or an area of main memory used to hold data produced by one process of device so it can be consumed later by another processor device, thereby decoupling the producer and consumer in time.", a: "buffer" },
+                { q: "[BLANK] is a style of I/O programming where the CPU, running the device driver, is responsible for copying all data between the I/O device controller and main memory.", a: "programmed i/o" },
+                { q: "The [BLANK] scheduling algorithm is a variant of Scan that services requests in only one direction; when the last request in that direction is reached , the head sweeps back to the other end without servicing any requests.", a: "C-SCAN" },
+                { q: "Unlike Scan, C-Scan guarantees a [BLANK] access time to all tracks because the head always services requests in the same direction, giving no positional advantage to midrange tracks.", a: "fairer" },
+                { q: "A disk [BLANK] (also called a buffer cache) is an area of main memory used to cache recently accessed disk blocks, reducing the number of physical disk accesses required.", a: "buffer cache" },
+                { q: "With [BLANK] forwarding, a damaged disk block is mapped directly to a spare sector, which is fast and simple but causes logical blocks to no longer map to consecutive sectors.", a: "sector" },
+                { q: "In [BLANK] input mode, the keyboard driver preprocesses characters as the user types – handling backspaces and special keys — before passing the completed line to the application.", a: "cooked" },
+                { q: "In a RAID with [BLANK] parity, the redundant parity blocks are spread across all disks rather than stored on one dedicated disk, balancing the load of computing and checking parity information.", a: "distributed" },
+                { q: "A [BLANK] controller is a hardware component that allows devices to transfer data directly to and from main memory without requiring the CPU to copy the data.", a: "DMA" },
+                { q: "A [BLANK] (ECC) includes multiple parity bits in a data string to permit not only the detection but also the automatic correction of someo number of erroneous bits.", a: "error-correcting code" },
+                { q: "In Hamming code, a single-bit error can be identified by [BLANK] the positions of all parity bits that are found to be incorrect after reading the encoded string.", a: "summing" },
+                { q: "A disk surface is organized into concentric [BLANK], each of which is divided into a fixed number of sectors.", a: "tracks" },
+                { q: "When interrupts are used for I/O, after starting the operation the driver [BLANK] itself instead of repeatedly polling the busy flag, freeing the CPU to serve other processes.", a: "blocks" },
+                { q: "The controller register that the CPU writes to in order to start an I/O operation- for example, specifying “read” or “write” - is the [BLANK] register", a: "command" },
+                { q: "The [BLANK] code is a popular ECC that corrects a single bit error by inserting even-parity bits at positions 1, 2, 4, 8, … in the encoded string.", a: "Hamming" },
+                { q: "[BLANK] is a technique where the CPU determines whether a device is busy or idle by repeatedly reading a flag that is set and reset by the device controller.", a: "polling" },
+                { q: "The [BLANK] transfer rate is the rate at which data is streamed to or from the disk once the read/write head is positioned at the beginning of the desired sector.", a: "sustained" }
             ],
             10: [
-                { q: "With sector [BLANK], all blocks following a damaged block are shifted one position to the right.", a: "slipping" },
-                { q: "A logic bomb executes when a specific [BLANK] is met.", a: "condition" },
-                { q: "Executable code that inserts itself into programs and replicates is called a [BLANK].", a: "virus" },
-                { q: "The server sends a different random number with each login to prevent a [BLANK] attack.", a: "replay" },
-                { q: "[BLANK] cryptography uses the same key for both encryption and decryption.", a: "secret key" },
-                { q: "In [BLANK] authentication the system sends a random number r and the user computes H(r,pw).", a: "zero-knowledge" },
-                { q: "Breaking RSA requires [BLANK] the modulus n.", a: "factoring" },
-                { q: "A sandbox confines a program so it cannot access memory [BLANK] its designated region, regardless of what the program attempts to do.", a: "outside" },
-                { q: "A mechanism that bypasses normal user authentication is called a [BLANK].", a: "back door" },
-                { q: "An unauthorized program that spawns copies of itself across other systems is a [BLANK].", a: "worm" },
-                { q: "The disclosure of secret information by a legitimate user is known as [BLANK].", a: "leakage" },
-                { q: "Lowering the threshold in biometrics system reduces the number of genuine users who are incorrectly rejected, but increases the number of [BLANKS].", a: "imposter" },
-                { q: "A back door allows an attacker to gain access while bypassing normal [BLANK].", a: "authentication" },
-                { q: "A [BLANK] value must be chosen that balances the rate of rejected genuine attempts.", a: "threshold" },
-                { q: "A buffer overflow attack is possible because the program fails to check the [BLANK] of user input.", a: "length" },
-                { q: "An [BLANK] is associated with each object and lists every domain that has access.", a: "access control list" },
-                { q: "User authentication methods that measure and analyze unique physcial or behavioral characteristics of a person, such as fingerprints or retina patterns, are collectively known as [BLANK]", a: "biometrics" },
-                { q: "A back door is especially dangerous because it allows an attacker to gain access to a system while bypassing normal [BLANK]", a: "authentication" },
-                { q: "A [BLANK] is a protected region of memory divided into a code session and a data section, within which an imported program is confined so it cannot access or jump to locations outside the designated area.", a: "sandbox" },
-                { q: "The [BLANK] right, when attached to another right r, indicates that the holder of r is permitted to copy r to another domain. Without it, the right cannot be propagated.", a: "copy" },
-                { q: "A [BLANK] is associated with each domain and contains entries of the form (object, rights). Possession of an entry in this list serves as authorization -- similar to holding a ticket -- to perform the listed operations on the object.", a: "capability list" }, 
-                { q: "Between capability lists and access lists, [BLANK] lists make revoking a right harder because permissions for a given object are scattered across many individual process lists rather than stored centrally.", a: "capability" },
-                { q: "In public-key cryptography, the [BLANK] key is published and made available to any sender who wishes to encrypt a message to the receiver.", a: "public" },
-                { q: "A password that can be used only once and is therefore uselessif intercepted by an attacker is called a [BLANK].", a: "one time password"}
+                { q: "With sector [BLANK], all blocks following a damaged block are shifted one position to the right so that the logical blocks remain mapped to consecutive sectors, at the cost of more initial work.", a: "slipping" },
+                { q: "A logic bomb differs from other malware in that its destructive payload only executes when a specific [BLANK] is met, such as a date or the deletion of an employee record.", a: "condition" },
+                { q: "A piece of executable code that inserts itself into legitimate programs and replicates to other programs and systems with the intention of causing harm is called a [BLANK].", a: "virus" },
+                { q: "In challenge-response authentication, the server sends a different random number with each login attempt, which prevents an attacker from reusing an intercepted response in a [BLANK] attack.", a: "replay" },
+                { q: "User authentication methods that measure and analyze unique physical or behavioral characteristics of a person, such as fingerprints or retina patterns are collectively known as [BLANK].", a: "biometrics" },
+                { q: "[BLANK] cryptography (also called symmetric cryptography) uses the same key for both encryption and decryption, while public key cryptography uses two different keys.", a: "secret key" },
+                { q: "In [BLANK] authentication the system sends the user a random number r, the user computes H(r,pw) using a one way hash function and returns the result and the system verifies it by computing the same function independently.", a: "zero-knowledge" },
+                { q: "The RSA public key cryptosystem is considered computationally secure because breaking it requires [BLANK] the modulus n, which is the product of two very large prime numbers — a task that is computationally infeasible.", a: "factoring" },
+                { q: "A sandbox protects a system by confining an imported program so that it cannot access memory [BLANK] its designated region, regardless of what the program attempts to do.", a: "outside" },
+                { q: "Unauthorized code that is secretly inserted into a system and executes at a specified time to perform a destructive action, often used for blackmail or revenge is called a [BLANK].", a: "logic bomb" },
+                { q: "A mechanism embedded by a programmer that bypasses normal user authentication and allows unauthorized access to the system at a later time is called a [BLANK] (also known as a trapdoor).", a: "back door" },
+                { q: "An unauthorized program that exploits one or more system vulnerabilities to spawn copies of itself across other systems via a network is called a [BLANK].", a: "worm" },
+                { q: "The disclosure of confidential or secret information by a legitimate user to an unauthorized party is known as [BLANK].", a: "leakage" },
+                { q: "Lowering the threshold in a biometric system reduces the number of genuine users who are incorrectly rejected, but increases the number of [BLANK] attempts that are incorrectly accepted.", a: "imposter" },
+                { q: "A back door is especially dangerous because it allows an attacker to gain access to a system while bypassig normal [BLANK].", a: "authentication" },
+                { q: "In biometric authentication, when the probability distribution of genuine and imposter attempts overlap, a [BLANK] value must be chosen that balances the rate of rejected genuine attempts against the rate of accepted imposter attempts.", a: "threshold" },
+                { q: "A [BLANK] is associated with each domain and contains entries of the form (objects, rights). Possession of an entry in this list serves as authorization - similar to holding a ticket - to perform the listed operations on the object.", a: "capability list" },
+                { q: "A buffer overflow attack is possible because the vulnerable program fails to check the [BLANK] of user input before writing it to a fixed-size buffer on the stack.", a: "length" },
+                { q: "An [BLANK] is associated with each object and contains entries of the form (domain, rights), listing every domain that has any access to that object along with what operations are permitted.", a: "access control list" },
+                { q: "The main drawback of capability lists compared to access lists is the difficulty of [BLANK] a right, because capabilities for a given object are scattered across the individuals list of many different processes rather than stored in one place.", a: "revoking" },
+                { q: "The [BLANK] right, when attached to another right r, indicates that the holder of r is permitted to copy to another domain. Without it, the right cannot be propagated.", a: "copy" },
+                { q: "When a legitimate user runs a program that displays a fake copy of the login screen in order to steal credentials from an unsuspecting user, the attack is called [BLANK].", a: "phishing" },
+                { q: "An intrusion technique that exploits a program’s failure to check the size of user input, allowing an attacker to overwrite the return address on the stack and transfer control to arbitrary code is called a [BLANK].", a: "buffer overflow" }
             ],
             11: [
                 { q: "A collection of computers interconnected by a network into one coherent system is called a [BLANK].", a: "distributed system" },
@@ -289,7 +312,6 @@
             container.innerHTML = questions.map((item, idx) => {
                 let qFormatted = item.q;
                 let count = 0;
-                // Generate input boxes with NO validation until Enter is pressed
                 while (qFormatted.includes("[BLANK]")) {
                     qFormatted = qFormatted.replace("[BLANK]", `<input type="text" id="ans-${chapterNum}-${idx}-${count}" onkeypress="handleCheck(event, ${chapterNum}, ${idx})">`);
                     count++;
@@ -315,7 +337,7 @@
                 const inputs = document.querySelectorAll(`[id^="ans-${chap}-${idx}-"]`);
                 const userValues = Array.from(inputs).map(i => i.value.trim().toLowerCase());
                 
-                // For multiple blanks like "1 and 0", we combine them with " and " to match database string
+                // For multi-blank answers, join with " and " to match database
                 const combinedUser = userValues.join(' and ');
 
                 if (combinedUser === correctAnswer || (correctAnswer.includes('/') && correctAnswer.split('/').some(opt => opt.trim() === combinedUser))) {
