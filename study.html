@@ -153,7 +153,7 @@
                 { q: "Under the PFF algorithm, when the time since the last page fault is less than or equal to T, the faulting page is added to the resident set and the resident set [BLANK].", a: "grows" }
             ],
             8: [
-                { q: "The [BLANK] is a data structure kept in main memory that tracks all files currently in use. If facilitates efficient access to and manipulation of open files, storing information such as the current position, file length, and a pointer to the files attribute structure.", a: "open file table" },
+                { q: "The [BLANK] is a data structure kept in main memory that tracks all files currently in use. It facilitates efficient access to and manipulation of open files, storing information such as the current position, file length, and a pointer to the files attribute structure.", a: "open file table" },
                 { q: "The main drawback of storing all file attributes inside each directory entry is that file directories can become very large, which slows down searches. An alternative is to store only the file name in the directory and use a pointer to a separate [BLANK] that holds all the file’s attributes.", a: "file control block" },
                 { q: "A [BLANK] is a path that begins from the current working directory and rather than from the top of the hierarchy, allowing shorter path references for files in or near the current directory.", a: "relative path" },
                 { q: "A [BLANK] is a data structure used for free space management where each bit represents one disk block. A value of 1 indicates the block is [BLANK], and a value of 0 indicates the block is [BLANK].", a: "bitmap and free and allocated" },
@@ -191,14 +191,15 @@
                 { q: "In [BLANK] input mode, the keyboard driver preprocesses characters as the user types – handling backspaces and special keys — before passing the completed line to the application.", a: "cooked" },
                 { q: "In a RAID with [BLANK] parity, the redundant parity blocks are spread across all disks rather than stored on one dedicated disk, balancing the load of computing and checking parity information.", a: "distributed" },
                 { q: "A [BLANK] controller is a hardware component that allows devices to transfer data directly to and from main memory without requiring the CPU to copy the data.", a: "DMA" },
-                { q: "A [BLANK] (ECC) includes multiple parity bits in a data string to permit not only the detection but also the automatic correction of someo number of erroneous bits.", a: "error-correcting code" },
+                { q: "A [BLANK] (ECC) includes multiple parity bits in a data string to permit not only the detection but also the automatic correction of some number of erroneous bits.", a: "error-correcting code" },
                 { q: "In Hamming code, a single-bit error can be identified by [BLANK] the positions of all parity bits that are found to be incorrect after reading the encoded string.", a: "summing" },
                 { q: "A disk surface is organized into concentric [BLANK], each of which is divided into a fixed number of sectors.", a: "tracks" },
                 { q: "When interrupts are used for I/O, after starting the operation the driver [BLANK] itself instead of repeatedly polling the busy flag, freeing the CPU to serve other processes.", a: "blocks" },
                 { q: "The controller register that the CPU writes to in order to start an I/O operation- for example, specifying “read” or “write” - is the [BLANK] register", a: "command" },
                 { q: "The [BLANK] code is a popular ECC that corrects a single bit error by inserting even-parity bits at positions 1, 2, 4, 8, … in the encoded string.", a: "Hamming" },
                 { q: "[BLANK] is a technique where the CPU determines whether a device is busy or idle by repeatedly reading a flag that is set and reset by the device controller.", a: "polling" },
-                { q: "The [BLANK] transfer rate is the rate at which data is streamed to or from the disk once the read/write head is positioned at the beginning of the desired sector.", a: "sustained" }
+                { q: "The [BLANK] transfer rate is the rate at which data is streamed to or from the disk once the read/write head is positioned at the beginning of the desired sector.", a: "sustained" },
+                { q: "A major drawback of SSTF disk scheduling is that requests for tracks far from the current head position may be postponed indefinitely -- a condition known as[BLANK].", a: "starvation"}
             ],
             10: [
                 { q: "With sector [BLANK], all blocks following a damaged block are shifted one position to the right so that the logical blocks remain mapped to consecutive sectors, at the cost of more initial work.", a: "slipping" },
