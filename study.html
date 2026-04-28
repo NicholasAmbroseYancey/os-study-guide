@@ -208,7 +208,12 @@
                 { q: "The [BLANK] code is a popular ECC that corrects a single bit error by inserting even-parity bits at positions 1, 2, 4, 8, … in the encoded string.", a: "Hamming" },
                 { q: "[BLANK] is a technique where the CPU determines whether a device is busy or idle by repeatedly reading a flag that is set and reset by the device controller.", a: "polling" },
                 { q: "The [BLANK] transfer rate is the rate at which data is streamed to or from the disk once the read/write head is positioned at the beginning of the desired sector.", a: "sustained" },
-                { q: "A major drawback of SSTF disk scheduling is that requests for tracks far from the current head position may be postponed indefinitely -- a condition known as [BLANK].", a: "starvation"}
+                { q: "A major drawback of SSTF disk scheduling is that requests for tracks far from the current head position may be postponed indefinitely -- a condition known as [BLANK].", a: "starvation"},
+                { q: "RAID [BLANK] provides no redundant information and uses only striping to improve access speed, meaning a media failure on any disk results in the loss of that block's data.", a: "0"},
+                { q: "A [BLANK] is a device-specific program that implements I/O operations by interacting with the device controller, and is typically supplied by the device manufacturer", a: "device driver"},
+                { q: "RAID [BLANK] provides full redundancy by maintaining a complete duplicate copy of all data on a seperate set of disks, using a stable storage protocol to prevent data loss.", a: "1"},
+                { q: "[BLANK] is a technique where a sequence of data blocks b[i] is distributed over n disk such that disk[i] contains block b[i] modulo n, allowing multiple blocks to be accessed concurrently", a: "striping"},
+                { q: 'The controller register that the CPU writes to in order to start an I/O operation -- for example, specifying "read" or "write" -- is the [BLANK] register.', a: "opcode"}
             ],
             10: [
                 { q: "With sector [BLANK], all blocks following a damaged block are shifted one position to the right so that the logical blocks remain mapped to consecutive sectors, at the cost of more initial work.", a: "slipping" },
