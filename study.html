@@ -57,6 +57,9 @@
 
         button:hover { background: #252525; transform: translateY(-2px); border-color: var(--accent-color); }
         button.active { background-color: var(--accent-color); border-color: var(--accent-color); }
+        
+        .random-btn { border-color: var(--secondary-color); color: var(--secondary-color); }
+        .random-btn.active { background-color: var(--secondary-color); color: #000; }
 
         .card {
             background: var(--card-bg);
@@ -67,7 +70,7 @@
             border: 1px solid var(--border-color);
         }
 
-        .q-text { line-height: 1.8; }
+        .q-text { line-height: 1.8; font-size: 1em; }
 
         input[type="text"] {
             background: #000;
@@ -93,6 +96,8 @@
             background: rgba(255, 77, 109, 0.1);
         }
 
+        .action-container { margin-top: 20px; display: flex; justify-content: flex-end; }
+        .next-btn { background: var(--accent-color); color: white; padding: 10px 20px; border: none; border-radius: 8px; font-weight: bold; }
         .hidden { display: none !important; }
     </style>
 </head>
@@ -108,6 +113,7 @@
             <button onclick="loadChapter(9, this)">Quiz 9</button>
             <button onclick="loadChapter(10, this)">Quiz 10</button>
             <button onclick="loadChapter(11, this)">Chapter 11</button>
+            <button class="random-btn" onclick="startRandom(this)">🎲 Random</button>
         </div>
 
         <div id="quiz-container">
@@ -118,6 +124,9 @@
     </div>
 
     <script>
+        let randomQueue = [];
+        let currentRandomIdx = 0;
+
         const database = {
             7: [
                 { q: "In the second chance (clock) algorithm, when the clock hand reaches a page with reference bit = 1, the bit is cleared to [BLANK] and the page is skipped, giving it a second chance", a: "0" },
@@ -153,7 +162,7 @@
                 { q: "Under the PFF algorithm, when the time since the last page fault is less than or equal to T, the faulting page is added to the resident set and the resident set [BLANK].", a: "grows" }
             ],
             8: [
-                { q: "The [BLANK] is a data structure kept in main memory that tracks all files currently in use. It facilitates efficient access to and manipulation of open files, storing information such as the current position, file length, and a pointer to the files attribute structure.", a: "open file table" },
+                { q: "The [BLANK] is a data structure kept in main memory that tracks all files currently in use. If facilitates efficient access to and manipulation of open files, storing information such as the current position, file length, and a pointer to the files attribute structure.", a: "open file table" },
                 { q: "The main drawback of storing all file attributes inside each directory entry is that file directories can become very large, which slows down searches. An alternative is to store only the file name in the directory and use a pointer to a separate [BLANK] that holds all the file’s attributes.", a: "file control block" },
                 { q: "A [BLANK] is a path that begins from the current working directory and rather than from the top of the hierarchy, allowing shorter path references for files in or near the current directory.", a: "relative path" },
                 { q: "A [BLANK] is a data structure used for free space management where each bit represents one disk block. A value of 1 indicates the block is [BLANK], and a value of 0 indicates the block is [BLANK].", a: "bitmap and free and allocated" },
@@ -199,7 +208,7 @@
                 { q: "The [BLANK] code is a popular ECC that corrects a single bit error by inserting even-parity bits at positions 1, 2, 4, 8, … in the encoded string.", a: "Hamming" },
                 { q: "[BLANK] is a technique where the CPU determines whether a device is busy or idle by repeatedly reading a flag that is set and reset by the device controller.", a: "polling" },
                 { q: "The [BLANK] transfer rate is the rate at which data is streamed to or from the disk once the read/write head is positioned at the beginning of the desired sector.", a: "sustained" },
-                { q: "A major drawback of SSTF disk scheduling is that requests for tracks far from the current head position may be postponed indefinitely -- a condition known as[BLANK].", a: "starvation"}
+                { q: "A major drawback of SSTF disk scheduling is that requests for tracks far from the current head position may be postponed indefinitely -- a condition known as [BLANK].", a: "starvation"}
             ],
             10: [
                 { q: "With sector [BLANK], all blocks following a damaged block are shifted one position to the right so that the logical blocks remain mapped to consecutive sectors, at the cost of more initial work.", a: "slipping" },
@@ -302,6 +311,81 @@
             ]
         };
 
+        function startRandom(btnElement) {
+            randomQueue = [];
+            for (let chap in database) {
+                database[chap].forEach(q => randomQueue.push(q));
+            }
+            
+            // Shuffle
+            for (let i = randomQueue.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [randomQueue[i], randomQueue[j]] = [randomQueue[j], randomQueue[i]];
+            }
+
+            currentRandomIdx = 0;
+            const buttons = document.querySelectorAll('.chapter-menu button');
+            buttons.forEach(b => b.classList.remove('active'));
+            btnElement.classList.add('active');
+            showRandomQuestion();
+        }
+
+        function showRandomQuestion() {
+            const container = document.getElementById('quiz-container');
+            const item = randomQueue[currentRandomIdx];
+            
+            let qFormatted = item.q;
+            let count = 0;
+            while (qFormatted.includes("[BLANK]")) {
+                qFormatted = qFormatted.replace("[BLANK]", `<input type="text" id="ans-rand-${count}" onkeypress="checkRandom(event)">`);
+                count++;
+            }
+
+            container.innerHTML = `
+                <div class="card">
+                    <div class="q-text">${qFormatted}</div>
+                    <div id="fb-rand" style="font-weight:bold; margin-top:10px;"></div>
+                    <div id="hint-rand" class="hidden"></div>
+                    <div id="action-rand" class="action-container hidden">
+                        <button class="next-btn" onclick="nextRandom()">Next Question</button>
+                    </div>
+                </div>`;
+        }
+
+        function checkRandom(e) {
+            if (e.key === 'Enter') {
+                const item = randomQueue[currentRandomIdx];
+                const inputs = document.querySelectorAll('[id^="ans-rand-"]');
+                const user = Array.from(inputs).map(i => i.value.trim().toLowerCase()).join(' and ');
+                const correct = item.a.toLowerCase();
+                const feedback = document.getElementById('fb-rand');
+                const action = document.getElementById('action-rand');
+                const hint = document.getElementById('hint-rand');
+
+                if (user === correct || (correct.includes('/') && correct.split('/').some(o => o.trim() === user))) {
+                    inputs.forEach(i => i.className = 'correct');
+                    feedback.innerText = '✓ Correct';
+                    feedback.style.color = 'var(--secondary-color)';
+                } else {
+                    inputs.forEach(i => i.className = 'incorrect');
+                    feedback.innerText = '✗ Incorrect';
+                    feedback.style.color = 'var(--error-color)';
+                    hint.innerHTML = `<div class="hint">Correct Answer: <b>${item.a}</b></div>`;
+                    hint.classList.remove('hidden');
+                }
+                action.classList.remove('hidden');
+            }
+        }
+
+        function nextRandom() {
+            currentRandomIdx++;
+            if (currentRandomIdx < randomQueue.length) {
+                showRandomQuestion();
+            } else {
+                document.getElementById('quiz-container').innerHTML = `<div class="card" style="text-align:center;"><h2>Set Complete!</h2><button onclick="location.reload()">Start Over</button></div>`;
+            }
+        }
+
         function loadChapter(chapterNum, btnElement) {
             const buttons = document.querySelectorAll('.chapter-menu button');
             buttons.forEach(b => b.classList.remove('active'));
@@ -320,9 +404,7 @@
 
                 return `
                 <div class="card">
-                    <div class="q-text">
-                        <strong>#${idx + 1}</strong> — ${qFormatted}
-                    </div>
+                    <div class="q-text"><strong>#${idx + 1}</strong> — ${qFormatted}</div>
                     <div id="fb-${chapterNum}-${idx}" style="font-weight:bold; margin-top:10px;"></div>
                     <div id="hint-${chapterNum}-${idx}" class="hint hidden">Correct Answer: <b>${item.a}</b></div>
                 </div>`;
@@ -334,20 +416,17 @@
                 const feedback = document.getElementById(`fb-${chap}-${idx}`);
                 const hint = document.getElementById(`hint-${chap}-${idx}`);
                 const correctAnswer = database[chap][idx].a.toLowerCase();
-                
                 const inputs = document.querySelectorAll(`[id^="ans-${chap}-${idx}-"]`);
                 const userValues = Array.from(inputs).map(i => i.value.trim().toLowerCase());
-                
-                // For multi-blank answers, join with " and " to match database
                 const combinedUser = userValues.join(' and ');
 
                 if (combinedUser === correctAnswer || (correctAnswer.includes('/') && correctAnswer.split('/').some(opt => opt.trim() === combinedUser))) {
-                    inputs.forEach(i => { i.className = 'correct'; });
+                    inputs.forEach(i => i.className = 'correct');
                     feedback.innerText = '✓ Correct';
                     feedback.style.color = 'var(--secondary-color)';
                     hint.classList.add('hidden');
                 } else {
-                    inputs.forEach(i => { i.className = 'incorrect'; });
+                    inputs.forEach(i => i.className = 'incorrect');
                     feedback.innerText = '✗ Incorrect';
                     feedback.style.color = 'var(--error-color)';
                     hint.classList.remove('hidden');
