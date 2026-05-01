@@ -1,6 +1,6 @@
 # OS Study Guide 
 
-An interactive study guide for COMP 350. Currently chapters 7 - 11 is supported.
+An interactive study guide for COMP 350. Now supports all chapters (thanks to @weqsama)!
 
 Clone the repo using this command
 
