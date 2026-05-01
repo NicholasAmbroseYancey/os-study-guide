@@ -1,105 +1,10 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OS Study Guide</title>
-    <style>
-        :root {
-            --bg-color: #0f0f0f;
-            --card-bg: #1a1a1a;
-            --text-color: #e0e0e0;
-            --accent-color: #9d65ff;
-            --secondary-color: #00f2d8;
-            --error-color: #ff4d6d;
-            --border-color: #333;
-        }
-
-        body {
-            font-family: 'Segoe UI', Roboto, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .container { max-width: 950px; width: 100%; }
-        h1 { text-align: center; color: var(--accent-color); margin-bottom: 5px; }
-        .subtitle { text-align: center; color: #888; margin-bottom: 25px; }
-
-        .chapter-menu {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            justify-content: center;
-            margin-bottom: 30px;
-            position: sticky;
-            top: 0;
-            background: var(--bg-color);
-            padding: 15px 0;
-            z-index: 1000;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        button {
-            padding: 10px 18px;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 700;
-            background-color: var(--card-bg);
-            color: white;
-            transition: 0.3s;
-        }
-
-        button:hover { background: #252525; transform: translateY(-2px); border-color: var(--accent-color); }
-        button.active { background-color: var(--accent-color); border-color: var(--accent-color); }
-        
-        .random-btn { border-color: var(--secondary-color); color: var(--secondary-color); }
-        .random-btn.active { background-color: var(--secondary-color); color: #000; }
-
-        .card {
-            background: var(--card-bg);
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-            margin-bottom: 15px;
-            border: 1px solid var(--border-color);
-        }
-
-        .q-text { line-height: 1.8; font-size: 1em; }
-
-        input[type="text"] {
-            background: #000;
-            border: 1px solid #555;
-            color: var(--secondary-color);
-            padding: 4px 10px;
-            border-radius: 4px;
-            outline: none;
-            width: 200px;
-            font-size: 1em;
-            vertical-align: middle;
-        }
-
-        .correct { border-color: var(--secondary-color) !important; background: #0a2b26 !important; }
-        .incorrect { border-color: var(--error-color) !important; background: #2b0a0a !important; }
-
-        .hint {
-            color: #ffb86c;
-            font-size: 0.9em;
-            margin-top: 10px;
-            padding: 10px;
-            border-left: 3px solid var(--error-color);
-            background: rgba(255, 77, 109, 0.1);
-        }
-
-        .action-container { margin-top: 20px; display: flex; justify-content: flex-end; }
-        .next-btn { background: var(--accent-color); color: white; padding: 10px 20px; border: none; border-radius: 8px; font-weight: bold; }
-        .hidden { display: none !important; }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
@@ -108,12 +13,18 @@
         <div class="subtitle">Select a chapter</div>
 
         <div class="chapter-menu">
+            <button onclick="loadChapter(1, this)">Quiz 1</button>
+            <button onclick="loadChapter(2, this)">Quiz 2</button>
+            <button onclick="loadChapter(3, this)">Quiz 3</button>
+            <button onclick="loadChapter(4, this)">Quiz 4</button>
+            <button onclick="loadChapter(5, this)">Quiz 5</button>
+            <button onclick="loadChapter(6, this)">Quiz 6</button>
             <button onclick="loadChapter(7, this)">Quiz 7</button>
             <button onclick="loadChapter(8, this)">Quiz 8</button>
             <button onclick="loadChapter(9, this)">Quiz 9</button>
             <button onclick="loadChapter(10, this)">Quiz 10</button>
-            <button onclick="loadChapter(11, this)">Chapter 11</button>
-            <button class="random-btn" onclick="startRandom(this)">🎲 Random</button>
+            <button onclick="loadChapter(11, this)">Quiz 11</button>
+            <button class="random-btn" onclick="showRandomControls(this)">&#127922; Random</button>
         </div>
 
         <div id="quiz-container">
@@ -123,334 +34,23 @@
         </div>
     </div>
 
-    <script>
-        let randomQueue = [];
-        let currentRandomIdx = 0;
+    <!-- Random controls modal -->
+        <div id="random-modal" class="modal-overlay hidden" aria-hidden="true">
+            <div class="modal" role="dialog" aria-modal="true" aria-labelledby="random-modal-title">
+                <h3 id="random-modal-title">Random Run &#8212; Select Count</h3>
+                <div class="modal-body">
+                    <label for="count-slider" style="color:#bbb; font-size:0.95rem; min-width:44px;">Count</label>
+                    <input id="count-slider" type="range" min="1" max="1" value="1" style="flex:1">
+                    <input id="count-input" type="number" min="1" value="1" style="width:72px; padding:6px; border-radius:6px; background:var(--card-bg); color:var(--text-color); border:1px solid var(--border-color)">
+                </div>
+                <div class="modal-actions">
+                    <button class="close" onclick="hideRandomControls()">Cancel</button>
+                    <button onclick="startRandomConfirmed()" style="background:var(--secondary-color); color:#000; border:none; padding:8px 12px; border-radius:8px; font-weight:700;">Begin</button>
+                </div>
+            </div>
+        </div>
 
-        const database = {
-            7: [
-                { q: "In the second chance (clock) algorithm, when the clock hand reaches a page with reference bit = 1, the bit is cleared to [BLANK] and the page is skipped, giving it a second chance", a: "0" },
-                { q: "Load control is the activity of determining how many processes should be running [BLANK] at any given time to maximize overall system performance.", a: "concurrently" },
-                { q: "Immediately after a page is loaded into memory following a page fault, the present bit is set to [BLANK] and the modified bit is set to [BLANK].", a: "1, 0" },
-                { q: "A [BLANK] is the sequence of page numbers referenced by an executing program during a given time interval, used to compare page replacement algorithms.", a: "reference string" },
-                { q: "A limitation of the aging algorithm is that two pages accessed within the same [BLANK] appear identical in their register values, making them indistinguishable for replacement purposes.", a: "tick" },
-                { q: "In the second chance algorithm, a page is evicted only when the clock hand finds its reference bit equal to [BLANK].", a: "0" },
-                { q: "The [BLANK] page replacement algorithm selects the page that will not be referenced for the longest time in the future, guaranteeing the fewest possible page faults.", a: "optimal" },
-                { q: "The [BLANK] page replacement algorithm selects the page that has not been referenced for the longest time.", a: "LRU" },
-                { q: "In the effective access time formula E = (1 - P) x m + P x S, the variable S represents the [BLANK].", a: "service time" },
-                { q: "A large page table can be subdivided into pages managed by a higher order [BLANK] to reduce the amount of table that must be kept in RAM.", a: "directory" },
-                { q: "Two processes share a function f. With dynamic linking, if neither process ever calls f during a run, how many copies of f are loaded into memory? [BLANK]", a: "0" },
-                { q: "At each memory reference, the working set algorithm evicts all pages that are [BLANK] the current window of size d.", a: "outside" },
-                { q: "The optimal algorithm is not realizable in practice because replacement decisions depend on [BLANK], which are unknown at runtime.", a: "future references" },
-                { q: "Demand paging loads a page into memory only when [BLANK], rather than at the start of execution.", a: "needed" },
-                { q: "With a paged page table, the page number p is split into two components p1 and p2, where p1 selects an entry in [BLANK], which points to one page of the page table.", a: "page directory" },
-                { q: "The working set W(t, d) of a process is the set of distinct pages referenced during the past [BLANK] memory operations preceding time t.", a: "d" },
-                { q: "In the 7-step page fault handling sequence, what must the OS do before resuming the process after a page fault? List the key steps in order. [BLANK]", a: "update page table" },
-                { q: "A [BLANK] register holds the physical starting address of a program in memory and is added by the CPU to every logical address at runtime to produce the correct physical address.", a: "base" },
-                { q: "The [BLANK] page replacement algorithm selects the page that has been resident in memory for the longest time", a: "FIFO" },
-                { q: "The L = S criterion states that CPU utilization is near maximum when L, the mean time [BLANK], equals S, the time needed to service one page fault.", a: "between page faults" },
-                { q: "Bélády’s anomaly can occur with [BLANK] page replacement, but does NOT occur with LRU or Optimal", a: "FIFO" },
-                { q: "The aging page replacement algorithm uses an [BLANK] that is shifted right at each clock tick and loaded with the page’s reference bit to approximate how recently the page was used", a: "aging register" },
-                { q: "When m = 1, a page must be [BLANK] to disk before its frame can be reused for another page", a: "written" },
-                { q: "When L < S, the OS must [BLANK] the number of concurrent processes to avoid thrashing.", a: "decrease" },
-                { q: "As page size increases, the memory space covered by the TLB [BLANK] because each TLB entry maps a larger region.", a: "increases" },
-                { q: "The page fault frequency algorithm adjusts the resident set based on the [BLANK] between consecutive page faults", a: "time" },
-                { q: "The [BLANK] bit is a binary flag in each page table entry that indicates whether the corresponding page has been modified during execution.", a: "modified" },
-                { q: "Thrashing is an execution state in which most of the time is spent moving between [BLANK] and [BLANK] while the CPU is mostly idle.", a: "memory and disk" },
-                { q: "A [BLANK] is an interrupt that occurs when a program attempts to reference a non-resident page, causing the OS to load the page from the disk.", a: "page fault" },
-                { q: "Under the working set page placement algorithm, a process is only allowed to run if enough frames are available to hold its complete [BLANK].", a: "working set" },
-                { q: "Under the PFF algorithm, when the time since the last page fault is less than or equal to T, the faulting page is added to the resident set and the resident set [BLANK].", a: "grows" },
-                { q: "When the present bit p = 0, any attempt to access that page triggers a [BLANK]", a: "page fault"},
-                { q: "In the aging algorithm, the page chosen for replacement is the one with the [BLANK] register value, indicating it has been used least recently.", a: "smallest"},
-                { q: "Effective access timeis calculated as E = [BLANK]", a: "(1-P)*m + P*S"},
-                { q: "In the effective access time formula E = (1 - P) x m + P x S, the variable P represents the [BLANK]", a: "page fault rate"},
-                { q: "When m = 0, page is considered [BLANK] and can be overwritten during replacement without writing it back to disk.", a: "clean"},
-                { q: "A limitation of the aging alforithm is that two pages accessed within the same [BLANK] appear identical in their register values, making them indistinguishable for replacement purposes", a: "clock interval"}
-            ],
-            8: [
-                { q: "The [BLANK] is a data structure kept in main memory that tracks all files currently in use. If facilitates efficient access to and manipulation of open files, storing information such as the current position, file length, and a pointer to the files attribute structure.", a: "open file table" },
-                { q: "The main drawback of storing all file attributes inside each directory entry is that file directories can become very large, which slows down searches. An alternative is to store only the file name in the directory and use a pointer to a separate [BLANK] that holds all the file’s attributes.", a: "file control block" },
-                { q: "A [BLANK] is a path that begins from the current working directory and rather than from the top of the hierarchy, allowing shorter path references for files in or near the current directory.", a: "relative path" },
-                { q: "A [BLANK] is a data structure used for free space management where each bit represents one disk block. A value of 1 indicates the block is [BLANK], and a value of 0 indicates the block is [BLANK].", a: "bitmap, free, allocated" },
-                { q: "A [BLANK] is a structure of related data items — possibly of different data types — identified within a file by a numeric identifier or a unique key field.", a: "record" },
-                { q: "In a directed acyclic directory hierarchy, a [BLANK] is a non-negative integer associated with a file that indicates how many directories are currently pointing to it. A file is physically deleted only when this value reaches 0.", a: "link count" },
-                { q: "A [BLANK] is a short sequence of characters at the start of the file header that identifies the file type allowing the OS to determine which programs are permitted to access and interpret the file.", a: "magic number" },
-                { q: "In a tree structured directory hierarchy, the notation [BLANK] is used to refer to the parent of the current directory, allowing navigation upward in the hierarchy.", a: ".." },
-                { q: "A [BLANK] is an integral part of every OS whose function is to implement the concept of files, managing data on secondary storage and providing a high level interface to users.", a: "file system" },
-                { q: "Given a current file position k, and a block size b, the block number containing position k is computed as [BLANK], and the offset within that block is computed as [BLANK].", a: "k/b, k mod b" },
-                { q: "Under the PFF algorithm, when the time since the last page fault exceeds T, pages not referenced since the last page fault are [BLANK] from the resident set.", a: "removed" },
-                { q: "To allocate a disk block using a bitmap when individual bits cannot be addressed directly, a bitwise logical [BLANK] operation is applied to the byte containing the target bit, using a mask with a 1 in the corresponding position.", a: "AND" },
-                { q: "A [BLANK] is a data structure associated with a filename that contains all relevant attributes of the file. In Unix, this structure is called an [BLANK].", a: "file control block, i-node" },
-                { q: "In the block allocation scheme used by Unix, the file control block stores the block numbers of the first n file blocks directly. If a file requires more than n blocks, the next entry in the file control block points to a [BLANK], which stores additional block numbers.", a: "single indirect block" },
-                { q: "The most common file access method is [BLANK]. In this method, the OS maintains the current position within the file, and each read/write operation accesses the next n bytes or the next record.", a: "sequential access" },
-                { q: "During a read operation, the file system avoids reading an entire disk block for every call, maintaining a [BLANK] in the OFT entry. Data is copied from this structure to memory, and a new disk block is loaded only when the end of it is reached.", a: "read/write buffer" },
-                { q: "The close file operation reverses the effects of the open operation. If the r/w buffer was modified, it saves the buffer to disk, updates the [BLANK] in the FCBm and then frees the OFT entry.", a: "file length" },
-                { q: "An [BLANK] is a path that uniquely identifies a file by listing all directory and file names from the top of the hierarchy down to the target file, with names separated by a delimiter such as a forward slash", a: "absolute path name" },
-                { q: "In a [BLANK] block allocation scheme, file blocks may be scattered across the disk the FCB points to the first block, and each block contains a pointer to the next block.", a: "linked" },
-                { q: "A [BLANK] is a named collection of information managed on secondary storage by the operating system, which a user can access using high-level operations without knowing the specific characteristics of the underlying device.", a: "file" },
-                { q: "When a file is opened, the open operation returns a(n) [BLANK] into the open file table to the calling process, which is used for all subsequent read, write, and seek operations on the file", a: "index" },
-                { q: "To a free disk block using a bitmap when individual bits cannot be addressed directly, a bitwise logical [BLANK] operation is applied to the byte containing the target bit, using a mask with a 0 in the corresponding position", a: "AND" },
-                { q: "A [BLANK] is an array where each entry corresponds to one disk block. A file’s blocks are chained together by links within this array. When it is cached in memory, both sequential and direct access become efficient since no seek operations are needed to follow the chain", a: "File Alocation Table" },
-                { q: "When a file is destroyed, the file system frees the file's [BLANK] and directory entry. If the file is not empty, the disk blocks holding its contents are also marked as free.", a: "FCB" },
-                { q: "[BLANK] is information about the format and organization of file's data . It is generally stored in a file header and is visble only to the file system itself, not to the file's user", a: "Metadata" },
-                { q: "When the open operation is called, it copies a pointer to the [BLANK] into the OFT entry so that the file directory does not need to be searched again on future accesses.", a: "FCB"},
-                { q: "In a [BLANK] block allocation scheme, every file is mapped to an unbroken sequence of disk block. The FCB storesonly the first disk block and the file length. A major drawback is that a file cannot be expanded if the block immediately following the file is occupied.", a: "contiguous"},
-                { q: "To allocate a disk block using a bitmap when individual bits cannot be addressed directly, a bitwise logical [BLANK] operation is applied to the byte containing the target bit, using a mask with a 1 in the corresponding position.", a: "OR"},
-                { q: "A [BLANK] is a directory entry that points to a file or directory like a regular entry but is treated differently during deletion: deleting it removes only the entry itself, not the file it points to.", a: "symbolic link"},
-                { q: "The close file operation reverses the effects of the open operation. if the r/w buffer was modified, it saves the buffer to disk, updates the [BLANK] in the FCB, and then frees the OFT entry", a: "file length"}
-            ],
-            9: [
-                { q: "In a [BLANK] block allocation scheme, file blocks may be scattered across the disk. The FCB points to the first block, and each block contains a pointer to the next block. A key drawback is that direct access to a specific block is not possible without reading all preceding blocks.", a: "linked" },
-                { q: "A [BLANK] is an electronic circuit capable of operating a specific I/O device using binary signals, and its interface consists of a set of hardware registers and flags.", a: "device controller" },
-                { q: "The [BLANK] scheduling algorithm always selects the pending disk request that requires the shortest travel distance from the current head position, maximizing performance but risking starvation of distant tracks.", a: "SSTF" },
-                { q: "The [BLANK] scheduling algorithm (also called the elevator algorithm) services disk requests sequentially in the current direction of travel, reversing direction only when the outermost pending request is reached.", a: "SCAN" },
-                { q: "A [BLANK] is a register or an area of main memory used to hold data produced by one process of device so it can be consumed later by another processor device, thereby decoupling the producer and consumer in time.", a: "buffer" },
-                { q: "[BLANK] is a style of I/O programming where the CPU, running the device driver, is responsible for copying all data between the I/O device controller and main memory.", a: "programmed i/o" },
-                { q: "The [BLANK] scheduling algorithm is a variant of Scan that services requests in only one direction; when the last request in that direction is reached , the head sweeps back to the other end without servicing any requests.", a: "C-SCAN" },
-                { q: "Unlike Scan, C-Scan guarantees a [BLANK] access time to all tracks because the head always services requests in the same direction, giving no positional advantage to midrange tracks.", a: "fairer" },
-                { q: "A disk [BLANK] (also called a buffer cache) is an area of main memory used to cache recently accessed disk blocks, reducing the number of physical disk accesses required.", a: "buffer cache" },
-                { q: "With [BLANK] forwarding, a damaged disk block is mapped directly to a spare sector, which is fast and simple but causes logical blocks to no longer map to consecutive sectors.", a: "sector" },
-                { q: "In [BLANK] input mode, the keyboard driver preprocesses characters as the user types – handling backspaces and special keys — before passing the completed line to the application.", a: "cooked" },
-                { q: "In a RAID with [BLANK] parity, the redundant parity blocks are spread across all disks rather than stored on one dedicated disk, balancing the load of computing and checking parity information.", a: "distributed" },
-                { q: "A [BLANK] controller is a hardware component that allows devices to transfer data directly to and from main memory without requiring the CPU to copy the data.", a: "DMA" },
-                { q: "A [BLANK] (ECC) includes multiple parity bits in a data string to permit not only the detection but also the automatic correction of some number of erroneous bits.", a: "error-correcting code" },
-                { q: "In Hamming code, a single-bit error can be identified by [BLANK] the positions of all parity bits that are found to be incorrect after reading the encoded string.", a: "summing" },
-                { q: "A disk surface is organized into concentric [BLANK], each of which is divided into a fixed number of sectors.", a: "tracks" },
-                { q: "When interrupts are used for I/O, after starting the operation the driver [BLANK] itself instead of repeatedly polling the busy flag, freeing the CPU to serve other processes.", a: "blocks" },
-                { q: "The controller register that the CPU writes to in order to start an I/O operation- for example, specifying “read” or “write” - is the [BLANK] register", a: "command" },
-                { q: "The [BLANK] code is a popular ECC that corrects a single bit error by inserting even-parity bits at positions 1, 2, 4, 8, … in the encoded string.", a: "Hamming" },
-                { q: "[BLANK] is a technique where the CPU determines whether a device is busy or idle by repeatedly reading a flag that is set and reset by the device controller.", a: "polling" },
-                { q: "The [BLANK] transfer rate is the rate at which data is streamed to or from the disk once the read/write head is positioned at the beginning of the desired sector.", a: "sustained" },
-                { q: "A major drawback of SSTF disk scheduling is that requests for tracks far from the current head position may be postponed indefinitely -- a condition known as [BLANK].", a: "starvation"},
-                { q: "RAID [BLANK] provides no redundant information and uses only striping to improve access speed, meaning a media failure on any disk results in the loss of that block's data.", a: "0"},
-                { q: "A [BLANK] is a device-specific program that implements I/O operations by interacting with the device controller, and is typically supplied by the device manufacturer", a: "device driver"},
-                { q: "RAID [BLANK] provides full redundancy by maintaining a complete duplicate copy of all data on a seperate set of disks, using a stable storage protocol to prevent data loss.", a: "1"},
-                { q: "[BLANK] is a technique where a sequence of data blocks b[i] is distributed over n disk such that disk[i] contains block b[i] modulo n, allowing multiple blocks to be accessed concurrently", a: "striping"},
-                { q: 'The controller register that the CPU writes to in order to start an I/O operation -- for example, specifying "read" or "write" -- is the [BLANK] register.', a: "opcode"}
-            ],
-            10: [
-                { q: "With sector [BLANK], all blocks following a damaged block are shifted one position to the right so that the logical blocks remain mapped to consecutive sectors, at the cost of more initial work.", a: "slipping" },
-                { q: "A logic bomb differs from other malware in that its destructive payload only executes when a specific [BLANK] is met, such as a date or the deletion of an employee record.", a: "condition" },
-                { q: "A piece of executable code that inserts itself into legitimate programs and replicates to other programs and systems with the intention of causing harm is called a [BLANK].", a: "virus" },
-                { q: "In challenge-response authentication, the server sends a different random number with each login attempt, which prevents an attacker from reusing an intercepted response in a [BLANK] attack.", a: "replay" },
-                { q: "User authentication methods that measure and analyze unique physical or behavioral characteristics of a person, such as fingerprints or retina patterns are collectively known as [BLANK].", a: "biometrics" },
-                { q: "[BLANK] cryptography (also called symmetric cryptography) uses the same key for both encryption and decryption, while public key cryptography uses two different keys.", a: "secret key" },
-                { q: "In [BLANK] authentication the system sends the user a random number r, the user computes H(r,pw) using a one way hash function and returns the result and the system verifies it by computing the same function independently.", a: "zero-knowledge" },
-                { q: "The RSA public key cryptosystem is considered computationally secure because breaking it requires [BLANK] the modulus n, which is the product of two very large prime numbers — a task that is computationally infeasible.", a: "factoring" },
-                { q: "A sandbox protects a system by confining an imported program so that it cannot access memory [BLANK] its designated region, regardless of what the program attempts to do.", a: "outside" },
-                { q: "Unauthorized code that is secretly inserted into a system and executes at a specified time to perform a destructive action, often used for blackmail or revenge is called a [BLANK].", a: "logic bomb" },
-                { q: "A mechanism embedded by a programmer that bypasses normal user authentication and allows unauthorized access to the system at a later time is called a [BLANK] (also known as a trapdoor).", a: "back door" },
-                { q: "An unauthorized program that exploits one or more system vulnerabilities to spawn copies of itself across other systems via a network is called a [BLANK].", a: "worm" },
-                { q: "The disclosure of confidential or secret information by a legitimate user to an unauthorized party is known as [BLANK].", a: "leakage" },
-                { q: "Lowering the threshold in a biometric system reduces the number of genuine users who are incorrectly rejected, but increases the number of [BLANK] attempts that are incorrectly accepted.", a: "imposter" },
-                { q: "A back door is especially dangerous because it allows an attacker to gain access to a system while bypassig normal [BLANK].", a: "authentication" },
-                { q: "In biometric authentication, when the probability distribution of genuine and imposter attempts overlap, a [BLANK] value must be chosen that balances the rate of rejected genuine attempts against the rate of accepted imposter attempts.", a: "threshold" },
-                { q: "A [BLANK] is associated with each domain and contains entries of the form (objects, rights). Possession of an entry in this list serves as authorization - similar to holding a ticket - to perform the listed operations on the object.", a: "capability list" },
-                { q: "A buffer overflow attack is possible because the vulnerable program fails to check the [BLANK] of user input before writing it to a fixed-size buffer on the stack.", a: "length" },
-                { q: "An [BLANK] is associated with each object and contains entries of the form (domain, rights), listing every domain that has any access to that object along with what operations are permitted.", a: "access control list" },
-                { q: "The main drawback of capability lists compared to access lists is the difficulty of [BLANK] a right, because capabilities for a given object are scattered across the individuals list of many different processes rather than stored in one place.", a: "revoking" },
-                { q: "The [BLANK] right, when attached to another right r, indicates that the holder of r is permitted to copy to another domain. Without it, the right cannot be propagated.", a: "copy" },
-                { q: "When a legitimate user runs a program that displays a fake copy of the login screen in order to steal credentials from an unsuspecting user, the attack is called [BLANK].", a: "phishing" },
-                { q: "An intrusion technique that exploits a program’s failure to check the size of user input, allowing an attacker to overwrite the return address on the stack and transfer control to arbitrary code is called a [BLANK].", a: "buffer overflow" }
-            ],
-            11: [
-                { q: "A collection of computers interconnected by a network into one coherent system is called a [BLANK].", a: "distributed system" },
-                { q: "The individual nodes of a distributed system's network are called [BLANK].", a: "hosts" },
-                { q: "In a distributed system, processes communicate by sending [BLANK].", a: "messages" },
-                { q: "A unique network address assigned to each host to allow message routing is called an [BLANK].", a: "IP address" },
-                { q: "A [BLANK] network, also called a LAN, has fast links and a limited geographic extent.", a: "local area" },
-                { q: "A [BLANK] network, also called a WAN, has slow links and a wide geographic extent.", a: "wide area" },
-                { q: "OS extensions can join local memories of LAN hosts into a common shared address space called [BLANK].", a: "distributed shared memory" },
-                { q: "Multiple disjoint file systems in a WAN can be federated into a single shared system called a [BLANK].", a: "distributed file system" },
-                { q: "The process of mapping a symbolic host name to its IP address is called [BLANK].", a: "name resolution" },
-                { q: "The best-known system for hierarchical name resolution on the Internet is the [BLANK].", a: "DNS" },
-                { q: "In DNS, all hosts are arranged in a tree where each subtree is called a [BLANK].", a: "domain" },
-                { q: "The root level of the DNS tree contains the most general names such as [BLANK].", a: "top-level domains" },
-                { q: "A host responsible for some portion of the DNS name space is called a [BLANK].", a: "name server" },
-                { q: "A process that resolves path names from an application by querying name servers is called a [BLANK].", a: "resolver" },
-                { q: "A DNS query that involves only one name server, which returns the IP of the next lower server, is called [BLANK].", a: "iterative" },
-                { q: "A DNS query that propagates down through lower-level servers until the final IP is found is called [BLANK].", a: "recursive" },
-                { q: "To reduce queries sent to name servers, each resolver maintains a [BLANK] of recently resolved names.", a: "cache" },
-                { q: "When a portion of a future query matches a cached entry, the resolver sends only the [BLANK] to the cached server.", a: "suffix" },
-                { q: "For high-performance computing, group communication assigns each process a unique [BLANK] known to all other group processes.", a: "id" },
-                { q: "The function send(ALL, m) transmits message m to [BLANK] processes within the group.", a: "all" },
-                { q: "An integer assigned to a process by the OS for communication is called a [BLANK].", a: "port" },
-                { q: "A communication point of the form (IP, p) that uniquely identifies any process in a network is called a [BLANK].", a: "socket" },
-                { q: "Ports support [BLANK] communication — many senders, but only one receiver.", a: "many-to-one" },
-                { q: "Mailboxes support [BLANK] communication because multiple senders and receivers can access the same mailbox.", a: "many-to-many" },
-                { q: "A data structure maintained by the OS into which messages can be placed and retrieved is called a [BLANK].", a: "mailbox" },
-                { q: "A [BLANK] send resumes the sender as soon as the message is copied into the sender's OS buffer.", a: "non-blocking" },
-                { q: "A [BLANK] send blocks the sending process until the message has been fully delivered to the receiver.", a: "blocking" },
-                { q: "A [BLANK] receive blocks the receiving process until a message has been copied into the receiver's buffer.", a: "blocking" },
-                { q: "Communication is [BLANK] if both sender and receiver must be active at the same time to exchange a message.", a: "synchronous" },
-                { q: "A blocking send combined with a blocking receive results in [BLANK] communication.", a: "synchronous" },
-                { q: "A [BLANK] hides message-passing details by providing a construct similar to a regular function call.", a: "remote procedure call" },
-                { q: "The process of packing and unpacking parameters for transmission between computers is called [BLANK].", a: "marshaling" },
-                { q: "A [BLANK] stub is a local library function representing the remote function on the client side.", a: "client" },
-                { q: "A [BLANK] stub is the server-side counterpart responsible for invoking the named function.", a: "server" },
-                { q: "A local process called a [BLANK] maintains a table of server names and associated port numbers.", a: "binder" },
-                { q: "When a server's IP is unknown, a [BLANK] at an agreed-upon location maintains names and addresses.", a: "name server" },
-                { q: "Pointers cannot be passed directly in an RPC because they are only valid within a single computer's [BLANK].", a: "address space" },
-                { q: "[BLANK] DSM supports sharing of specific designated portions of address spaces via library routines.", a: "structured" },
-                { q: "[BLANK] DSM unites multiple page-based address spaces into one large uniform space via the OS.", a: "unstructured" },
-                { q: "When two unrelated variables accessed by different computers end up on the same page, it's called [BLANK].", a: "false sharing" },
-                { q: "False sharing is analogous to [BLANK] in virtual memory.", a: "thrashing" },
-                { q: "In DSM, larger page sizes reduce transfer startup cost but increase the risk of [BLANK].", a: "false sharing" },
-                { q: "In the write-[BLANK] protocol, when a page is modified, all remote replicas are invalidated.", a: "invalidate" },
-                { q: "In the write-[BLANK] protocol, when a page is modified, the new value is propagated to all replicas.", a: "update" },
-                { q: "Unlike virtual memory, unstructured DSM distributes pages over the [BLANK] of multiple computers.", a: "memories" },
-                { q: "In R migrate / W migrate DSM, concurrent accesses cause the page to move [BLANK] between computers.", a: "repeatedly" },
-                { q: "A DSM obeys [BLANK] consistency if reading variable x always returns the most recently written value.", a: "strict" },
-                { q: "The [BLANK] relation specifies when two events are causally related.", a: "happened-before" },
-                { q: "Two events are said to be [BLANK] if neither causally influenced the other.", a: "concurrent" },
-                { q: "[BLANK] clocks are a time-stamping mechanism that guarantees preservation of the happened-before relationship.", a: "logical" },
-                { q: "A [BLANK] is a virtual entity whose possession entitles a process to enter the critical section.", a: "token" },
-                { q: "In the centralized token approach, the main drawback is that the [BLANK] becomes a bottleneck.", a: "coordinator" },
-                { q: "In the token ring approach, all processes must participate in [BLANK] even when not entering the CS.", a: "passing the token" },
-                { q: "The loss of a token requires an [BLANK] algorithm to decide which process generates a new one.", a: "election" },
-                { q: "In distributed mutual exclusion, process p enters the CS after receiving [BLANK] from all others.", a: "permission" },
-                { q: "In the [BLANK] deadlock prevention strategy, an older process waits while a younger process restarts.", a: "wait-die" },
-                { q: "In the [BLANK] deadlock prevention strategy, an older process rolls back the younger.", a: "wound-wait" },
-                { q: "The main drawback of wound-wait is that some actions such as [BLANK] cannot be rolled back.", a: "i/o" },
-                { q: "The [BLANK] algorithm detects distributed deadlock by sending a probe along request edges.", a: "probe" },
-                { q: "When file location is hidden so users use the same path name regardless of host, this is location [BLANK].", a: "transparency" },
-                { q: "Making a remote directory subtree accessible under a local path name is called [BLANK].", a: "mounting" },
-                { q: "[BLANK] file semantics require that a write is immediately visible to all sharing clients.", a: "unix" },
-                { q: "Under [BLANK] semantics, a write is not visible until the writing client closes the file.", a: "session" },
-                { q: "Under [BLANK] file semantics, a shared file cannot be modified; a write creates a new version.", a: "immutable" },
-                { q: "[BLANK] caching means the server maintains a memory cache for recently accessed files.", a: "server" },
-                { q: "[BLANK] caching means each client maintains a separate cache in local memory.", a: "client" },
-                { q: "Client caching is incompatible with [BLANK] semantics because updates aren't immediately visible.", a: "unix" },
-                { q: "In the Read-Any/Write-All protocol, a client may read [BLANK] replica.", a: "any" },
-                { q: "In the Read-Any/Write-All protocol, a client must update [BLANK] replicas.", a: "all" },
-                { q: "In the Primary/Backup protocol, a client may update [BLANK] replica.", a: "one" },
-                { q: "A [BLANK] server maintains the open file status for all clients in an Open File Table.", a: "stateful" },
-                { q: "A [BLANK] server maintains no information about open files—every request is self-contained.", a: "stateless" }
-            ]
-        };
-
-        function startRandom(btnElement) {
-            randomQueue = [];
-            for (let chap in database) {
-                database[chap].forEach(q => randomQueue.push(q));
-            }
-            
-            // Shuffle
-            for (let i = randomQueue.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [randomQueue[i], randomQueue[j]] = [randomQueue[j], randomQueue[i]];
-            }
-
-            currentRandomIdx = 0;
-            const buttons = document.querySelectorAll('.chapter-menu button');
-            buttons.forEach(b => b.classList.remove('active'));
-            btnElement.classList.add('active');
-            showRandomQuestion();
-        }
-
-        function showRandomQuestion() {
-            const container = document.getElementById('quiz-container');
-            const item = randomQueue[currentRandomIdx];
-            
-            let qFormatted = item.q;
-            let count = 0;
-            while (qFormatted.includes("[BLANK]")) {
-                qFormatted = qFormatted.replace("[BLANK]", `<input type="text" id="ans-rand-${count}" onkeypress="checkRandom(event)">`);
-                count++;
-            }
-
-            container.innerHTML = `
-                <div class="card">
-                    <div class="q-text">${qFormatted}</div>
-                    <div id="fb-rand" style="font-weight:bold; margin-top:10px;"></div>
-                    <div id="hint-rand" class="hidden"></div>
-                    <div id="action-rand" class="action-container hidden">
-                        <button class="next-btn" onclick="nextRandom()">Next Question</button>
-                    </div>
-                </div>`;
-        }
-
-        function checkRandom(e) {
-            if (e.key === 'Enter') {
-                const item = randomQueue[currentRandomIdx];
-                const inputs = document.querySelectorAll('[id^="ans-rand-"]');
-                const user = Array.from(inputs).map(i => i.value.trim().toLowerCase()).join(' and ');
-                const correct = item.a.toLowerCase();
-                const feedback = document.getElementById('fb-rand');
-                const action = document.getElementById('action-rand');
-                const hint = document.getElementById('hint-rand');
-
-                if (user === correct || (correct.includes('/') && correct.split('/').some(o => o.trim() === user))) {
-                    inputs.forEach(i => i.className = 'correct');
-                    feedback.innerText = '✓ Correct';
-                    feedback.style.color = 'var(--secondary-color)';
-                } else {
-                    inputs.forEach(i => i.className = 'incorrect');
-                    feedback.innerText = '✗ Incorrect';
-                    feedback.style.color = 'var(--error-color)';
-                    hint.innerHTML = `<div class="hint">Correct Answer: <b>${item.a}</b></div>`;
-                    hint.classList.remove('hidden');
-                }
-                action.classList.remove('hidden');
-            }
-        }
-
-        function nextRandom() {
-            currentRandomIdx++;
-            if (currentRandomIdx < randomQueue.length) {
-                showRandomQuestion();
-            } else {
-                document.getElementById('quiz-container').innerHTML = `<div class="card" style="text-align:center;"><h2>Set Complete!</h2><button onclick="location.reload()">Start Over</button></div>`;
-            }
-        }
-
-        function loadChapter(chapterNum, btnElement) {
-            const buttons = document.querySelectorAll('.chapter-menu button');
-            buttons.forEach(b => b.classList.remove('active'));
-            if(btnElement) btnElement.classList.add('active');
-
-            const container = document.getElementById('quiz-container');
-            const questions = database[chapterNum];
-            
-            container.innerHTML = questions.map((item, idx) => {
-                let qFormatted = item.q;
-                let count = 0;
-                while (qFormatted.includes("[BLANK]")) {
-                    qFormatted = qFormatted.replace("[BLANK]", `<input type="text" id="ans-${chapterNum}-${idx}-${count}" onkeypress="handleCheck(event, ${chapterNum}, ${idx})">`);
-                    count++;
-                }
-
-                return `
-                <div class="card">
-                    <div class="q-text"><strong>#${idx + 1}</strong> — ${qFormatted}</div>
-                    <div id="fb-${chapterNum}-${idx}" style="font-weight:bold; margin-top:10px;"></div>
-                    <div id="hint-${chapterNum}-${idx}" class="hint hidden">Correct Answer: <b>${item.a}</b></div>
-                </div>`;
-            }).join('');
-        }
-
-        function handleCheck(e, chap, idx) {
-            if (e.key === 'Enter') {
-                const feedback = document.getElementById(`fb-${chap}-${idx}`);
-                const hint = document.getElementById(`hint-${chap}-${idx}`);
-                const correctAnswer = database[chap][idx].a.toLowerCase();
-                const inputs = document.querySelectorAll(`[id^="ans-${chap}-${idx}-"]`);
-                const userValues = Array.from(inputs).map(i => i.value.trim().toLowerCase());
-                const combinedUser = userValues.join(' and ');
-
-                if (combinedUser === correctAnswer || (correctAnswer.includes('/') && correctAnswer.split('/').some(opt => opt.trim() === combinedUser))) {
-                    inputs.forEach(i => i.className = 'correct');
-                    feedback.innerText = '✓ Correct';
-                    feedback.style.color = 'var(--secondary-color)';
-                    hint.classList.add('hidden');
-                } else {
-                    inputs.forEach(i => i.className = 'incorrect');
-                    feedback.innerText = '✗ Incorrect';
-                    feedback.style.color = 'var(--error-color)';
-                    hint.classList.remove('hidden');
-                }
-            }
-        }
-    </script>
+    <script src="data.js"></script>
+    <script src="app.js"></script>
 </body>
 </html>
